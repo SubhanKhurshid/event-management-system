@@ -1,26 +1,33 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-hot-toast";
-import { useUser } from "./state";
-function SignIn() {
-  const {user, loginUser} = useUser();
+import React from "react";
+import axios from "axios";
+import { atom, useAtom } from "jotai";
+interface Users {
+  UserName: string;
+  UserEmail: string;
+  UserPassword: string;
+}
+export const userAtom = atom(null);
 
+function Login() {
+  const [user, setUser] = useAtom(userAtom);
 
+  const handleClick = () => {
+    const reponse = axios.post("http://localhost:8800/api/users/signin", {});
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen ml-72">
       <div className="bg-black borde-2 border-gray-500 px-10 py-10 shadow-2xl shadow-white">
         <div className="text-white font-bold">Login</div>
         <div className="flex flex-col space-y-5">
-        <label>Name</label>
+          <label>Name</label>
           <input
-            type="text"
+            type="name"
             id="name"
             className="w-full px-10 py-2 text-left bg-transparent text-[#cccccc] placeholder-gray-600 focus:outline-none border-2 border-gray-500 rounded-lg"
             placeholder="Enter your name"
-            name="email"
-            value={user?.UserName || ''} 
+            name="name"
+            value={user.name}
             onChange={(e) => handleChange(e)}
           />
           <label>Email</label>
@@ -30,7 +37,7 @@ function SignIn() {
             className="w-full px-10 py-2 text-left bg-transparent text-[#cccccc] placeholder-gray-600 focus:outline-none border-2 border-gray-500 rounded-lg"
             placeholder="Enter your email"
             name="email"
-            value={user?.UserEmail || ''}}
+            value={details.email}
             onChange={(e) => handleChange(e)}
           />
           <label>Password</label>
@@ -40,7 +47,7 @@ function SignIn() {
             className="w-full px-10 py-2 text-left bg-transparent text-[#cccccc] placeholder-gray-600 focus:outline-none border-2 border-gray-500 rounded-lg"
             placeholder="Enter your Password"
             name="password"
-            value={user?.UserPassword || ''}
+            value={details.password}
             onChange={(e) => handleChange(e)}
           />
         </div>
@@ -52,4 +59,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Login;
