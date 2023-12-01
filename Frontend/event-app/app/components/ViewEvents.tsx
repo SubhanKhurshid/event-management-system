@@ -12,6 +12,9 @@ interface Event {
   EventTime: string;
   EventLocation: string;
   EventDescription: string;
+  SpeakerID: number;
+  SpeakerName: string;
+  ScheduleID: string;
   UserID: number;
 }
 
@@ -48,7 +51,7 @@ function ViewEvents() {
   // };
 
   return (
-    <div className="relative max-w-6xl overflow-hidden">
+    <div className="relative max-w-6xl overflow-x-scroll">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -74,6 +77,15 @@ function ViewEvents() {
               Event Description
             </th>
             <th scope="col" className="px-6 py-3">
+              Speaker ID
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Speaker Name
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Schedule ID
+            </th>
+            <th scope="col" className="px-6 py-3">
               User ID
             </th>
             <th scope="col" className="px-6 py-3">
@@ -95,6 +107,9 @@ function ViewEvents() {
                 <td className="px-6 py-4">{event.EventTime}</td>
                 <td className="px-6 py-4">{event.EventLocation}</td>
                 <td className="px-6 py-4">{event.EventDescription}</td>
+                <td className="px-6 py-4">{event.SpeakerID}</td>
+                <td className="px-6 py-4">{event.SpeakerName}</td>
+                <td className="px-6 py-4">{event.ScheduleID}</td>
                 <td className="px-6 py-4">{event.UserID}</td>
 
                 <td>

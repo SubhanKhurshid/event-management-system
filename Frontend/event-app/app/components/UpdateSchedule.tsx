@@ -1,19 +1,28 @@
 "use client";
 import axios from "axios";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
+interface Speakers {
+  SpeakerID: number;
+}
 interface Events {
   EventID: number;
 }
+function UpdateSchedule() {
+  const { id } = useParams();
 
-function AddReport() {
+  const [speaker, setSpeaker] = useState<Speakers[]>([]);
+  const [selectedSpeaker, setSelectedSpeaker] = useState("");
   const [event, setEvent] = useState<Events[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [report, setReport] = useState({
-    Attendance: "",
-    Revenue: "",
-    Feedback: "",
+  const [schedule, setSchedule] = useState({
+    ScheduleID: id,
+    SessionDetails: "",
+    ActivityDetails: "",
   });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,36 +35,56 @@ function AddReport() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:8800/api/speakers");
+        setSpeaker(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleChange = (e: any) => {
     const value = e.target.value;
-    setReport({ ...report, [e.target.name]: value });
+    setSchedule({ ...schedule, [e.target.name]: value });
   };
 
   const handleClear = (e: any) => {
     e.preventDefault();
-    setReport({
-      Attendance: "",
-      Revenue: "",
-      Feedback: "",
+    setSchedule({
+      ScheduleID: "",
+      SessionDetails: "",
+      ActivityDetails: "",
     });
+    setSelectedEvent("");
+    setSelectedSpeaker("");
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8800/api/reports/", {
-        Attendance: report.Attendance,
-        Revenue: report.Revenue,
-        Feedback: report.Feedback,
-        EventID: selectedEvent,
-      });
+      const response = await axios.put(
+        `http://localhost:8800/api/schedules/${id}`,
+        {
+          SessionDetails: schedule.SessionDetails,
+          ActivityDetails: schedule.ActivityDetails,
+          EventID: selectedEvent,
+          SpeakerID: selectedSpeaker,
+        }
+      );
+      toast.success("Schedule updated");
       console.log(response.data);
 
-      setReport({
-        Attendance: "",
-        Revenue: "",
-        Feedback: "",
+      setSchedule({
+        ScheduleID: "",
+        SessionDetails: "",
+        ActivityDetails: "",
       });
+      setSelectedEvent("");
+      setSelectedSpeaker("");
     } catch (e) {
       console.log(e);
     }
@@ -70,37 +99,25 @@ function AddReport() {
         <div className="flex flex-col items-center justify-center space-y-5">
           <div className="flex flex-col items-center justify-center">
             <label htmlFor="eventName" className="text-black">
-              Attendance
-            </label>
-            <input
-              type="number"
-              className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Attendance"
-              value={report.Attendance}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <label htmlFor="eventName" className="text-black">
-              Revenue
-            </label>
-            <input
-              type="number"
-              className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Revenue"
-              value={report.Revenue}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <label htmlFor="eventName" className="text-black">
-              Feedback
+              Session Details
             </label>
             <input
               type="text"
               className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Feedback"
-              value={report.Feedback}
+              name="SessionDetails"
+              value={schedule.SessionDetails}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <label htmlFor="eventName" className="text-black">
+              Activity Details
+            </label>
+            <input
+              type="text"
+              className="text-black px-4 py-2 border-2 border-gray-500"
+              name="ActivityDetails"
+              value={schedule.ActivityDetails}
               onChange={(e) => handleChange(e)}
             />
           </div>
@@ -109,7 +126,7 @@ function AddReport() {
             <label className="font-bold text-black">Select Event</label>
             <select
               className="border-2 text-black border-gray-500 rounded-md py-2 px-4 focus:outline-none "
-              name="categoryId"
+              name="EventID"
               id="category"
               value={selectedEvent}
               onChange={(e) => setSelectedEvent(e.target.value)}
@@ -125,8 +142,26 @@ function AddReport() {
                 </option>
               ))}
             </select>
+            <label className="font-bold text-black">Select Speaker</label>
+            <select
+              className="border-2 text-black border-gray-500 rounded-md py-2 px-4 focus:outline-none "
+              name="SpeakerID"
+              id="category"
+              value={selectedSpeaker}
+              onChange={(e) => setSelectedSpeaker(e.target.value)}
+            >
+              <option>Select Speaker</option>
+              {speaker.map((item) => (
+                <option
+                  className="text-black"
+                  key={item.SpeakerID}
+                  value={item.SpeakerID}
+                >
+                  {item.SpeakerID}
+                </option>
+              ))}
+            </select>
           </div>
-
           <div>
             <div className="flex space-x-2">
               <button
@@ -149,4 +184,4 @@ function AddReport() {
   );
 }
 
-export default AddReport;
+export default UpdateSchedule;

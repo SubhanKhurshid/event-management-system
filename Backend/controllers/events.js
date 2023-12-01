@@ -20,7 +20,8 @@ export const createEvent = (req, res) => {
 };
 
 export const readEvent = (req, res) => {
-  const query = "Select * from Events";
+  const query =
+    "select * from events e Join speakers s on e.EventID = s.EventID JOIN schedules sc ON sc.EventID = e.EventID";
   db.query(query, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.status(200).json(data);
@@ -30,7 +31,7 @@ export const readEvent = (req, res) => {
 export const updateEvent = (req, res) => {
   const eventId = req.params.id;
   const query =
-    "UPDATE Events SET `EventName`= ?, `EventDetails` = ?, `EventTime` = ?, `EventLocation` = ?, `EventDescription` = ? WHERE `EventID` = ? AND `UserID` = ?";
+    "UPDATE Events SET `EventName`= ?, `EventDetails` = ?, `EventTime` = ?, `EventLocation` = ?, `EventDescription` = ? WHERE `EventID` = ?";
   const values = [
     req.body.EventName,
     req.body.EventDetails,
@@ -39,7 +40,7 @@ export const updateEvent = (req, res) => {
     req.body.EventDescription,
   ];
 
-  db.query(query, [...values, eventId, 1], (err, data) => {
+  db.query(query, [...values, eventId], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.json("Post has been updated.");
   });

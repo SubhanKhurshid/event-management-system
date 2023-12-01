@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 function AddParticipants() {
   const [participant, setParticipant] = useState({
@@ -24,7 +25,7 @@ function AddParticipants() {
         }
       );
       console.log(response.data);
-      setParticipant(response.data);
+      toast.success("Participants added");
     } catch (e) {
       console.log(e);
     }
@@ -45,7 +46,7 @@ function AddParticipants() {
   return (
     <div className="flex items-center justify-center ml-72">
       <div
-        className="bg-gray-400 rounded-md shadow-2xl shadow-blue-800 flex items-center px-20 py-10"
+        className="bg-gray-400 rounded-md flex items-center px-20 py-10"
         style={{ transform: "scale(0.8)" }}
       >
         <div className="flex flex-col items-center justify-center space-y-5">

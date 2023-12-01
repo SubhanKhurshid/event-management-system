@@ -36,9 +36,9 @@ export const deleteReports = (req, res) => {
 export const updateReports = (req, res) => {
   const reportId = req.params.id;
   const query =
-    "UPDATE Reports SET `Attendance`= ?, `Revenue` = ?, `Feedback` = ?  WHERE `ReportID` = ? AND `EventID` = ? ";
+    "UPDATE Reports SET `Attendance` = ?, `Revenue` = ?, `Feedback` = ?  WHERE `ReportID` = ?";
   const values = [req.body.Attendance, req.body.Revenue, req.body.Feedback];
-  db.query(query, [...values, reportId, 1], (err, data) => {
+  db.query(query, [...values, reportId], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.json("Data has been updated.");
   });

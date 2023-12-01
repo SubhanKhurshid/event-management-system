@@ -26,9 +26,9 @@ export const readSpeakers = (req, res) => {
 export const updateSpeakers = (req, res) => {
   const SpeakerId = req.params.id;
   const query =
-    "UPDATE Speakers SET `SpeakerName` = ?, `SpeakerAvailability` = ? WHERE `SpeakerID` = ? AND `EventID` = ?";
+    "UPDATE Speakers SET `SpeakerName` = ?, `SpeakerAvailability` = ? WHERE `SpeakerID` = ?";
   const values = [req.body.SpeakerName, req.body.SpeakerAvailability];
-  db.query(query, [...values, SpeakerId, 1], (err, data) => {
+  db.query(query, [...values, SpeakerId], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.json("Data updated.");
   });

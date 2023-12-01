@@ -1,19 +1,24 @@
 "use client";
 import axios from "axios";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface Events {
   EventID: number;
 }
 
-function AddReport() {
+function UpdateReport() {
+  const { id } = useParams();
   const [event, setEvent] = useState<Events[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
   const [report, setReport] = useState({
+    ReportID: id,
     Attendance: "",
     Revenue: "",
     Feedback: "",
   });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,6 +39,7 @@ function AddReport() {
   const handleClear = (e: any) => {
     e.preventDefault();
     setReport({
+      ReportID: id,
       Attendance: "",
       Revenue: "",
       Feedback: "",
@@ -43,15 +49,20 @@ function AddReport() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8800/api/reports/", {
-        Attendance: report.Attendance,
-        Revenue: report.Revenue,
-        Feedback: report.Feedback,
-        EventID: selectedEvent,
-      });
+      const response = await axios.put(
+        `http://localhost:8800/api/reports/${id}`,
+        {
+          Attendance: report.Attendance,
+          Revenue: report.Revenue,
+          Feedback: report.Feedback,
+          EventID: selectedEvent,
+        }
+      );
       console.log(response.data);
+      toast.success("Report Updated");
 
       setReport({
+        ReportID: id,
         Attendance: "",
         Revenue: "",
         Feedback: "",
@@ -149,4 +160,4 @@ function AddReport() {
   );
 }
 
-export default AddReport;
+export default UpdateReport;

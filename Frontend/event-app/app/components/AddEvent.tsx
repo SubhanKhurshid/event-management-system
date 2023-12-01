@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface User {
   UserID: number;
@@ -61,6 +62,7 @@ function AddEvent() {
         UserID: selectedUser,
       });
       console.log(response.data);
+      toast.success("Event added");
 
       setEvent({
         EventName: "",
@@ -78,7 +80,7 @@ function AddEvent() {
   return (
     <div className="flex items-center justify-center ml-72 -mt-20">
       <div
-        className="bg-gray-400 rounded-md shadow-2xl shadow-blue-800 flex items-center px-20 py-10"
+        className="bg-gray-400 rounded-md flex items-center px-20 py-10"
         style={{ transform: "scale(0.7)" }}
       >
         <div className="flex flex-col items-center justify-center space-y-5">
@@ -157,7 +159,7 @@ function AddEvent() {
           <div className="flex flex-col items-center justify-center">
             <label className="font-bold text-black">Select User</label>
             <select
-              className="border-2 border-gray-500 rounded-md py-2 px-4 focus:outline-none "
+              className="border-2 text-black border-gray-500 rounded-md py-2 px-4 focus:outline-none "
               name="categoryId"
               id="category"
               value={selectedUser}

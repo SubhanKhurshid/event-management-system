@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 function sidebar() {
   return (
-    <div className="bg-gray-400 shadow-2xl shadow-red-600 w-60 h-screen">
+    <div className="bg-gray-400 w-60 h-[650px]">
       <div className="flex flex-col items-start px-5 justify-center space-y-3">
         <div className="text-black text-center font-bold">
           EVENT MANAGEMENT SYSTEM

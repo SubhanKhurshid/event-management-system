@@ -2,6 +2,7 @@
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface User {
   UserID: number;
@@ -67,6 +68,7 @@ function UpdateEvent() {
         }
       );
       console.log(response.data);
+      toast.success("Event Updated");
 
       setEvent({
         EventID: id,
@@ -85,7 +87,7 @@ function UpdateEvent() {
   return (
     <div className="flex items-center justify-center ml-72 -mt-20">
       <div
-        className="bg-gray-400 rounded-md shadow-2xl shadow-blue-800 flex items-center px-20 py-10"
+        className="bg-gray-400 rounded-md flex items-center px-20 py-10"
         style={{ transform: "scale(0.7)" }}
       >
         <div className="flex flex-col items-center justify-center space-y-5">

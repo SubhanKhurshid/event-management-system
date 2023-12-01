@@ -20,7 +20,7 @@ export const readSchedules = (req, res) => {
   const query = "SELECT * FROM Schedules";
   db.query(query, [req.params.id], (err, data) => {
     if (err) return res.status(500).json(err);
-    return res.status(500).json(data);
+    return res.status(200).json(data);
   });
 };
 
@@ -36,7 +36,7 @@ export const deleteSchedules = (req, res) => {
 export const updateSchedules = (req, res) => {
   const scheduleId = req.params.id;
   const query =
-    "UPDATE Schedules SET `SessionDetails` = ?, `SpeakerID` = ?, `ActivityDetails` = ? WHERE `ScheduleID` = ? AND `EventID` = ?";
+    "UPDATE Schedules SET `SessionDetails` = ?, `SpeakerID` = ?, `ActivityDetails` = ? WHERE `ScheduleID` = ?";
 
   const values = [
     req.body.SessionDetails,
@@ -44,7 +44,7 @@ export const updateSchedules = (req, res) => {
     req.body.ActivityDetails,
   ];
 
-  db.query(query, [...values, scheduleId, 1], (err, data) => {
+  db.query(query, [...values, scheduleId], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.json("Data has been updated.");
   });

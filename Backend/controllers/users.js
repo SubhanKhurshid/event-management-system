@@ -48,3 +48,25 @@ export const updateUser = (req, res) => {
     return res.json("updated");
   });
 };
+
+export const signin = (req, res) => {
+  const query =
+    "INSERT INTO Users (`UserName`, `UserEmail`, `UserPassword`) VALUES (?)";
+  const values = [req.body.UserName, req.body.UserEmail, req.body.UserPassword];
+
+  db.query(query, [values], (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};
+
+export const signup = (req, res) => {
+  const query =
+    "INSERT INTO Users (`UserName`, `UserEmail`,`UserPassword`) VALUES (?)";
+  const values = [req.body.UserName, req.body.UserEmail, req.body.UserPassword];
+
+  db.query(query, [values], (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  });
+};

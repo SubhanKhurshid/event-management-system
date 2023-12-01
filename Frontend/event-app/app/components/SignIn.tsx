@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast/headless";
+import { toast } from "react-hot-toast";
 
 function SignIn() {
   const userEmail = "admin@gmail.com";

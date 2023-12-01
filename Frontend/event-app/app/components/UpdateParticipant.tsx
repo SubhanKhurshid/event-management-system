@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 function UpdateParticipant() {
   const { id } = useParams();
@@ -27,7 +28,7 @@ function UpdateParticipant() {
         }
       );
       console.log(response.data);
-      setParticipant(response.data);
+      toast.success("Participant Updated");
     } catch (e) {
       console.log(e);
     }
@@ -51,7 +52,7 @@ function UpdateParticipant() {
   return (
     <div className="flex items-center justify-center ml-72">
       <div
-        className="bg-gray-400 rounded-md shadow-2xl shadow-blue-800 flex items-center px-20 py-10"
+        className="bg-gray-400 rounded-md flex items-center px-20 py-10"
         style={{ transform: "scale(0.8)" }}
       >
         <div className="flex flex-col items-center justify-center space-y-5">

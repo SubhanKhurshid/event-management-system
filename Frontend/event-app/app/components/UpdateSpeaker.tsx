@@ -1,23 +1,28 @@
 "use client";
 import axios from "axios";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-interface Events {
+interface Event {
   EventID: number;
 }
 
-function AddReport() {
-  const [event, setEvent] = useState<Events[]>([]);
+function UpdateSpeaker() {
+  const { id } = useParams();
+  const [event, setEvent] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
-  const [report, setReport] = useState({
-    Attendance: "",
-    Revenue: "",
-    Feedback: "",
+  const [speaker, setSpeaker] = useState({
+    SpeakerID: id,
+    SpeakerName: "",
+    SpeakerAvailability: "",
   });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:8800/api/events");
+        console.log(res.data);
         setEvent(res.data);
       } catch (e) {
         console.log(e);
@@ -28,37 +33,39 @@ function AddReport() {
 
   const handleChange = (e: any) => {
     const value = e.target.value;
-    setReport({ ...report, [e.target.name]: value });
-  };
-
-  const handleClear = (e: any) => {
-    e.preventDefault();
-    setReport({
-      Attendance: "",
-      Revenue: "",
-      Feedback: "",
-    });
+    setSpeaker({ ...speaker, [e.target.name]: value });
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8800/api/reports/", {
-        Attendance: report.Attendance,
-        Revenue: report.Revenue,
-        Feedback: report.Feedback,
-        EventID: selectedEvent,
-      });
+      const response = await axios.put(
+        `http://localhost:8800/api/speakers/${id}`,
+        {
+          SpeakerName: speaker.SpeakerName,
+          SpeakerAvailability: speaker.SpeakerAvailability,
+          EventID: selectedEvent,
+        }
+      );
+      toast.success("Speakers Updated");
       console.log(response.data);
-
-      setReport({
-        Attendance: "",
-        Revenue: "",
-        Feedback: "",
+      setSpeaker({
+        SpeakerID: id,
+        SpeakerName: "",
+        SpeakerAvailability: "",
       });
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleClear = (e: any) => {
+    e.preventDefault();
+    setSpeaker({
+      SpeakerID: id,
+      SpeakerName: "",
+      SpeakerAvailability: "",
+    });
   };
 
   return (
@@ -70,45 +77,32 @@ function AddReport() {
         <div className="flex flex-col items-center justify-center space-y-5">
           <div className="flex flex-col items-center justify-center">
             <label htmlFor="eventName" className="text-black">
-              Attendance
-            </label>
-            <input
-              type="number"
-              className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Attendance"
-              value={report.Attendance}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <label htmlFor="eventName" className="text-black">
-              Revenue
-            </label>
-            <input
-              type="number"
-              className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Revenue"
-              value={report.Revenue}
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <label htmlFor="eventName" className="text-black">
-              Feedback
+              Speaker Name
             </label>
             <input
               type="text"
               className="text-black px-4 py-2 border-2 border-gray-500"
-              name="Feedback"
-              value={report.Feedback}
+              name="SpeakerName"
+              value={speaker.SpeakerName}
               onChange={(e) => handleChange(e)}
             />
           </div>
-
+          <div className="flex flex-col items-center justify-center">
+            <label htmlFor="eventName" className="text-black">
+              Speaker Availability
+            </label>
+            <input
+              type="text"
+              className="text-black px-4 py-2 border-2 border-gray-500"
+              name="SpeakerAvailability"
+              value={speaker.SpeakerAvailability}
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
           <div className="flex flex-col items-center justify-center">
             <label className="font-bold text-black">Select Event</label>
             <select
-              className="border-2 text-black border-gray-500 rounded-md py-2 px-4 focus:outline-none "
+              className="border-2 border-gray-500 text-black rounded-md py-2 px-4 focus:outline-none "
               name="categoryId"
               id="category"
               value={selectedEvent}
@@ -127,21 +121,19 @@ function AddReport() {
             </select>
           </div>
 
-          <div>
-            <div className="flex space-x-2">
-              <button
-                onClick={handleSubmit}
-                className="px-3 py-2 rounded-md text-white bg-gray-800 hover:opacity-80"
-              >
-                Submit
-              </button>
-              <button
-                onClick={handleClear}
-                className="px-3 py-2 rounded-md text-white bg-gray-800 hover:opacity-80"
-              >
-                Clear
-              </button>
-            </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={handleSubmit}
+              className="px-3 py-2 rounded-md text-white bg-gray-800 hover:opacity-80"
+            >
+              Submit
+            </button>
+            <button
+              onClick={handleClear}
+              className="px-3 py-2 rounded-md text-white bg-gray-800 hover:opacity-80"
+            >
+              Clear
+            </button>
           </div>
         </div>
       </div>
@@ -149,4 +141,4 @@ function AddReport() {
   );
 }
 
-export default AddReport;
+export default UpdateSpeaker;

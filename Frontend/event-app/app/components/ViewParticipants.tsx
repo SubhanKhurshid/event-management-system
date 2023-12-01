@@ -3,7 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
+import { toast } from "react-hot-toast";
 interface Participants {
   ParticipantID: number;
   ParticipantName: string;
@@ -30,7 +30,7 @@ function ViewParticipants() {
     e.preventDefault();
     try {
       axios.delete(`http://localhost:8800/api/participants/${ParticipantID}`);
-      console.log(ParticipantID);
+      toast.success("Participant Deleted");
       router.push("/add-participants");
     } catch (e) {
       console.log(e);
@@ -42,7 +42,7 @@ function ViewParticipants() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen ml-72">
+    <div className="flex items-center justify-center min-h-screen ml-40">
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
