@@ -56,9 +56,8 @@ export const deleteEvent = (req, res) => {
 };
 
 export const register = (req, res) => {
-  const query =
-    "INSERT INTO EventParticipants (`EventID`, `ParticipantID`) VALUES (?)";
-  const values = [req.body.EventID, req.body.ParticipantID];
+  const query = "INSERT INTO EventParticipants(`EventID`, `UserID`) VALUES (?)";
+  const values = [req.body.EventID, req.body.UserID];
   db.query(query, [values], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.json("Participant has been added in Event.");

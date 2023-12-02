@@ -50,11 +50,13 @@ export const updateUser = (req, res) => {
 };
 
 export const signin = (req, res) => {
+  const UserEmail = req.body.UserEmail;
+  const UserPassword = req.body.UserPassword;
+  console.log(UserEmail, UserPassword);
   const query =
-    "INSERT INTO Users (`UserName`, `UserEmail`, `UserPassword`) VALUES (?)";
-  const values = [req.body.UserName, req.body.UserEmail, req.body.UserPassword];
+    "select * from Users Where `UserEmail` = ? AND `UserPassword` = ?";
 
-  db.query(query, [values], (err, data) => {
+  db.query(query, [UserEmail, UserPassword], (err, data) => {
     if (err) return res.status(500).json(err);
     return res.status(200).json(data);
   });

@@ -3,7 +3,9 @@ import axios from 'axios';
 export const signInApi = async (credentials: { UserName: string, UserEmail: string, UserPassword: string }) => {
   try {
     const response = await axios.post("http://localhost:8800/api/users/signin", credentials);
+    console.log(response.data)
     return response.data;
+    
   } catch (error) {
     throw error;
   }
