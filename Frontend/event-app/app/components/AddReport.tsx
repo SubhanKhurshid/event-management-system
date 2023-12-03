@@ -1,12 +1,15 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface Events {
   EventID: number;
 }
 
 function AddReport() {
+  const router = useRouter();
   const [event, setEvent] = useState<Events[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
   const [report, setReport] = useState({
@@ -49,8 +52,9 @@ function AddReport() {
         Feedback: report.Feedback,
         EventID: selectedEvent,
       });
-      console.log(response.data);
 
+      toast.success("Report Added");
+      router.push("/view-reports");
       setReport({
         Attendance: "",
         Revenue: "",

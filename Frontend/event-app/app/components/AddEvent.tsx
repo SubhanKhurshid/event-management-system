@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface User {
   UserID: number;
@@ -9,6 +10,7 @@ interface User {
 }
 
 function AddEvent() {
+  const router = useRouter();
   const [user, setUser] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [event, setEvent] = useState({
@@ -61,8 +63,8 @@ function AddEvent() {
         EventDescription: event.EventDescription,
         UserID: selectedUser,
       });
-      console.log(response.data);
       toast.success("Event added");
+      router.push("/view-event");
 
       setEvent({
         EventName: "",

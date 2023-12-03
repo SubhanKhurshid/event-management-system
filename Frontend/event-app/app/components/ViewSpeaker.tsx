@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useUser } from "../state/state";
 interface Speakers {
   SpeakerID: number;
   SpeakerName: string;
@@ -12,6 +13,7 @@ interface Speakers {
 }
 
 function ViewSpeaker() {
+  const { user } = useUser();
   const [speaker, setSpeaker] = useState<Speakers[]>([]);
 
   const router = useRouter();
@@ -62,9 +64,11 @@ function ViewSpeaker() {
               <th scope="col" className="px-6 py-3">
                 Event ID
               </th>
-              <th scope="col" className="px-6 py-3">
-                Actions
-              </th>
+              {user && user.UserRole === "admin" && (
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -78,22 +82,24 @@ function ViewSpeaker() {
                   <td className="px-6 py-4">{event.SpeakerName}</td>
                   <td className="px-6 py-4">{event.SpeakerAvailability}</td>
                   <td className="px-6 py-4">{event.EventID}</td>
-                  <td>
-                    <div className="flex space-x-2 px-2">
-                      <button
-                        onClick={(e) => handleDelete(e, event.SpeakerID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        onClick={(e) => updateEvent(e, event.SpeakerID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </td>
+                  {user && user.UserRole === "admin" && (
+                    <td>
+                      <div className="flex space-x-2 px-2">
+                        <button
+                          onClick={(e) => handleDelete(e, event.SpeakerID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={(e) => updateEvent(e, event.SpeakerID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>

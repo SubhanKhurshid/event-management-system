@@ -1,9 +1,11 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 function AddParticipants() {
+  const router = useRouter();
   const [participant, setParticipant] = useState({
     ParticipantName: "",
     ParticipantEmail: "",
@@ -24,8 +26,9 @@ function AddParticipants() {
           ParticipantEmail: participant.ParticipantEmail,
         }
       );
-      console.log(response.data);
-      toast.success("Participants added");
+
+      toast.success("Participant added");
+      router.push("/view-participants");
     } catch (e) {
       console.log(e);
     }

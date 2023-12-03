@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast, { Toast } from "react-hot-toast";
 interface Event {
@@ -7,6 +8,7 @@ interface Event {
 }
 
 function AddSpeaker() {
+  const router = useRouter();
   const [event, setEvent] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
   const [speaker, setSpeaker] = useState({
@@ -18,7 +20,6 @@ function AddSpeaker() {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:8800/api/events");
-        console.log(res.data);
         setEvent(res.data);
       } catch (e) {
         console.log(e);
@@ -42,6 +43,7 @@ function AddSpeaker() {
       });
       console.log(response.data);
       toast.success("Speakers added");
+      router.push("/view-speaker");
     } catch (e) {
       console.log(e);
     }

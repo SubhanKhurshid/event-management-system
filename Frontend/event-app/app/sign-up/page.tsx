@@ -1,7 +1,8 @@
 import React from "react";
+import SignUp from "../components/SignUp";
 
 function page() {
-  return <div></div>;
+  return <SignUp />;
 }
 
 export default page;

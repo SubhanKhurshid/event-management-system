@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useUser } from "../state/state";
 interface Reports {
   ReportID: number;
   Attendance: number;
@@ -12,6 +13,7 @@ interface Reports {
 }
 
 function ViewReport() {
+  const { user } = useUser();
   const router = useRouter();
   const [reports, setReports] = useState<Reports[]>([]);
 
@@ -65,9 +67,11 @@ function ViewReport() {
               <th scope="col" className="px-6 py-3">
                 Event ID
               </th>
-              <th scope="col" className="px-6 py-3">
-                Actions
-              </th>
+              {user && user.UserRole === "admin" && (
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -82,22 +86,24 @@ function ViewReport() {
                   <td className="px-6 py-4">${report.Revenue}</td>
                   <td className="px-6 py-4">{report.Feedback}</td>
                   <td className="px-6 py-4">{report.EventID}</td>
-                  <td>
-                    <div className="flex space-x-2 px-2">
-                      <button
-                        onClick={(e) => handleDelete(e, report.ReportID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        onClick={(e) => updateEvent(e, report.ReportID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </td>
+                  {user && user.UserRole === "admin" && (
+                    <td>
+                      <div className="flex space-x-2 px-2">
+                        <button
+                          onClick={(e) => handleDelete(e, report.ReportID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={(e) => updateEvent(e, report.ReportID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>

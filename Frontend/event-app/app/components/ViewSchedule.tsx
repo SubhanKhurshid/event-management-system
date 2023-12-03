@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import React, { useEffect, useState } from "react";
+import { useUser } from "../state/state";
 
 interface Schedules {
   ScheduleID: number;
@@ -14,6 +15,7 @@ interface Schedules {
 }
 
 function ViewSchedule() {
+  const { user } = useUser();
   const router = useRouter();
   const [schedule, setSchedule] = useState<Schedules[]>([]);
 
@@ -66,9 +68,11 @@ function ViewSchedule() {
               <th scope="col" className="px-6 py-3">
                 Event ID
               </th>
-              <th scope="col" className="px-6 py-3">
-                Actions
-              </th>
+              {user && user.UserRole === "admin" && (
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -83,22 +87,24 @@ function ViewSchedule() {
                   <td className="px-6 py-4">{sc.SpeakerID}</td>
                   <td className="px-6 py-4">{sc.ActivityDetails}</td>
                   <td className="px-6 py-4">{sc.EventID}</td>
-                  <td>
-                    <div className="flex space-x-2 px-2">
-                      <button
-                        onClick={(e) => handleDelete(e, sc.ScheduleID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        onClick={(e) => updateEvent(e, sc.ScheduleID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </td>
+                  {user && user.UserRole === "admin" && (
+                    <td>
+                      <div className="flex space-x-2 px-2">
+                        <button
+                          onClick={(e) => handleDelete(e, sc.ScheduleID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={(e) => updateEvent(e, sc.ScheduleID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>

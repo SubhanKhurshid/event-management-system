@@ -4,7 +4,7 @@ import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { userAtom } from "../state/state";
+import { useUser, userAtom } from "../state/state";
 import { toast } from "react-hot-toast";
 interface Event {
   EventID: number;
@@ -21,6 +21,7 @@ interface Event {
 }
 
 function ViewEvents() {
+  const { user } = useUser();
   const router = useRouter();
   const [events, setEvent] = useState<Event[]>([]);
 
@@ -36,7 +37,6 @@ function ViewEvents() {
 
     fetchData();
   }, []);
-  const [user, _] = useAtom(userAtom);
 
   const updateEvent = (e: any, EventID: number) => {
     e.preventDefault();
@@ -45,16 +45,19 @@ function ViewEvents() {
 
   const RegisterUser = async (e: any, EventID: number) => {
     e.preventDefault();
+    console.log(user);
     try {
-      // const response = await axios.post(
-      //   "http://localhost:8800/api/events/register",
-      //   {
-      //     EventID,
-      //     UserID: user?.UserID,
-      //   }
-      // );
-      console.log(user);
-      toast.success("Registered Successfully.");
+      if (user) {
+        const response = await axios.post(
+          "http://localhost:8800/api/events/register",
+          {
+            EventID,
+            UserID: user.UserID,
+          }
+        );
+        console.log(user.UserID);
+        toast.success("Registered Successfully.");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -97,7 +100,7 @@ function ViewEvents() {
             <th scope="col" className="px-6 py-3">
               User ID
             </th>
-            <th scope="col" className="px-10 py-3">
+            <th scope="col" className="px-6 py-3">
               Actions
             </th>
           </tr>
@@ -109,7 +112,7 @@ function ViewEvents() {
                 key={event.EventID}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               >
-                <td className="px-6 py-4 text-white">{event.EventID}</td>
+                <td className="px-6 py-4">{event.EventID}</td>
                 <td className="px-6 py-4">{event.EventName}</td>
                 <td className="px-6 py-4">{event.EventDetails}</td>
                 <td className="px-6 py-4">{event.EventDate}</td>
@@ -123,20 +126,15 @@ function ViewEvents() {
 
                 <td>
                   <div className="flex space-x-2 px-2">
-                    {/* <button
-                      onClick={() => handleDelete(event.EventID)}
-                      className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                    >
-                      Delete
-                    </button> */}
-
-                    <button
-                      onClick={(e) => updateEvent(e, event.EventID)}
-                      className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                    >
-                      Update
-                    </button>
-                    {user && (
+                    {user && user.UserRole === "admin" && (
+                      <button
+                        onClick={(e) => updateEvent(e, event.EventID)}
+                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                      >
+                        Update
+                      </button>
+                    )}
+                    {user && user.UserRole === "user" && (
                       <button
                         onClick={(e) => RegisterUser(e, event.EventID)}
                         className="bg-green-500 text-white px-2 py-1 rounded-md hover:opacity-80"

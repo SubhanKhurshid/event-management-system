@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useUser } from "../state/state";
 interface Participants {
   ParticipantID: number;
   ParticipantName: string;
@@ -13,6 +14,7 @@ interface Participants {
 function ViewParticipants() {
   const [participant, setParticipant] = useState<Participants[]>([]);
   const router = useRouter();
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,9 +58,11 @@ function ViewParticipants() {
               <th scope="col" className="px-6 py-3">
                 Participant Email
               </th>
-              <th scope="col" className="px-6 py-3">
-                Actions
-              </th>
+              {user && user.UserRole === "admin" && (
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -73,22 +77,24 @@ function ViewParticipants() {
                   </td>
                   <td className="px-6 py-4">{event.ParticipantName}</td>
                   <td className="px-6 py-4">{event.ParticipantEmail}</td>
-                  <td>
-                    <div className="flex space-x-2 px-2">
-                      <button
-                        onClick={(e) => handleDelete(e, event.ParticipantID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        onClick={(e) => updateEvent(e, event.ParticipantID)}
-                        className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </td>
+                  {user && user.UserRole === "admin" && (
+                    <td>
+                      <div className="flex space-x-2 px-2">
+                        <button
+                          onClick={(e) => handleDelete(e, event.ParticipantID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Delete
+                        </button>
+                        <button
+                          onClick={(e) => updateEvent(e, event.ParticipantID)}
+                          className="bg-gray-500 text-white px-2 py-1 rounded-md hover:opacity-80"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
           </tbody>

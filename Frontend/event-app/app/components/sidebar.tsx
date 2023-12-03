@@ -6,6 +6,7 @@ import { useUser, userAtom } from "../state/state";
 
 function sidebar() {
   const { user } = useUser();
+  console.log(user);
   return (
     <div className="bg-gray-400 w-60 h-[650px]">
       <div className="flex flex-col items-start px-5 justify-center space-y-3">
@@ -69,26 +70,23 @@ function sidebar() {
             </div>
           </div>
           <div className="flex flex-col space-y-2">
-            {user && user.UserRole === "admin" && (
-              <>
-                <h1 className="text-black font-bold">REPORTS</h1>
-
-                <div className="flex flex-col space-y-2">
-                  <Link
-                    className="text-black hover:underline"
-                    href={"/add-reports"}
-                  >
-                    Add Report
-                  </Link>
-                  <Link
-                    className="text-black hover:underline"
-                    href={"/view-reports"}
-                  >
-                    View Report
-                  </Link>
-                </div>
-              </>
-            )}
+            <h1 className="text-black font-bold">REPORTS</h1>
+            <div className="flex flex-col space-y-2">
+              {user && user.UserRole === "admin" && (
+                <Link
+                  className="text-black hover:underline"
+                  href={"/add-reports"}
+                >
+                  Add Report
+                </Link>
+              )}
+              <Link
+                className="text-black hover:underline"
+                href={"/view-reports"}
+              >
+                View Report
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col space-y-2">
             <h1 className="text-black font-bold">SCHEDULES</h1>

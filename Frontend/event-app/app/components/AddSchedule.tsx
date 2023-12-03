@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 interface Speakers {
@@ -10,6 +11,7 @@ interface Events {
 }
 
 function AddSchedule() {
+  const router = useRouter();
   const [speaker, setSpeaker] = useState<Speakers[]>([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState("");
   const [event, setEvent] = useState<Events[]>([]);
@@ -71,8 +73,7 @@ function AddSchedule() {
         }
       );
       toast.success("Schedule added");
-      console.log(response.data);
-
+      router.push("/view-speaker");
       setSchedule({
         SessionDetails: "",
         ActivityDetails: "",
